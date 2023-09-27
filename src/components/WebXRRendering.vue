@@ -26,10 +26,17 @@ function updateXRStateFunc() {
   xrSessionRunning.value = !!vtkWebXRStore.xrHelper.getXrSession();
 };
 
+function hideLookingGlassOverlay() {
+  const element = document.getElementById('LookingGlassWebXRControls');
+  element?.setAttribute('hidden','hidden');
+}
+
 function startXRFunc(sessionType:XrSessionTypes) {
   const { viewProxy } = useViewProxy(TARGET_VIEW_ID, ViewProxyType.Volume);
   vtkWebXRStore.xrHelper.setRenderWindow(viewProxy.value.getOpenGLRenderWindow());
   vtkWebXRStore.xrHelper.startXR(sessionType);
+
+  setTimeout(hideLookingGlassOverlay, 1000);
 }
 
 onVTKEvent(vtkWebXRStore.xrHelper, 'onModified', updateXRStateFunc);
